@@ -114,7 +114,8 @@ async function queryZkWasmImage(md5) {
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
-        const images = await response.json();
+        const response_data = await response.json();
+        const images = response_data.result;
         // Return the first image if found
         if (Array.isArray(images) && images.length > 0) {
             return images[0];

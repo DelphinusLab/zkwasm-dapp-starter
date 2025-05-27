@@ -133,6 +133,7 @@ async function copyTemplateFiles(template, targetDir, config) {
     const packageDir = path.resolve(__dirname, '..');
     const commonFiles = [
         '.gitignore',
+        '.env.example',
         'rust-toolchain',
         'Makefile'
     ];
