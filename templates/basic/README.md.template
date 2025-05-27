@@ -1,0 +1,221 @@
+# {{projectName}}
+
+{{description}}
+
+## Features
+
+{{#templateFeatures}}
+- {{.}}
+{{/templateFeatures}}
+
+## Prerequisites
+
+- [zkWasm CLI](https://github.com/DelphinusLab/zkwasm-starter) installed globally
+- Node.js (>=16.0.0)
+- Rust toolchain with wasm32-unknown-unknown target
+- wasm-pack and wasm-opt
+
+## Development Workflow
+
+### 1. Initial Setup
+
+After creating the project with `zkwasm create`, follow these steps:
+
+```bash
+# Navigate to TypeScript directory and install dependencies
+cd ts
+npm install
+
+# Compile TypeScript files
+npx tsc
+
+# Return to project root
+cd ..
+```
+
+### 2. Validate Project Structure
+
+```bash
+# Validate project configuration and dependencies
+zkwasm validate
+```
+
+### 3. Build the Application
+
+```bash
+# Build the zkWasm application
+zkwasm build
+# or alternatively: make build
+```
+
+The build process will:
+- Compile Rust code to WebAssembly
+- Optimize WASM with wasm-opt
+- Generate TypeScript definitions
+- Calculate MD5 hash for deployment tracking
+
+### 4. Run the Application
+
+```bash
+# Run the zkWasm service locally
+make run
+```
+
+### 5. Deployment Preparation
+
+```bash
+# Generate publish script for zkWasm hub
+zkwasm publish
+
+# Check deployment readiness
+zkwasm check --verbose
+```
+
+## Detailed Development Steps
+
+### TypeScript Setup
+
+```bash
+cd ts
+npm install          # Install Node.js dependencies
+npx tsc             # Compile TypeScript to JavaScript
+cd ..
+```
+
+### Build Process
+
+```bash
+make build          # Complete build pipeline
+```
+
+This will:
+1. Generate admin public key
+2. Compile TypeScript service
+3. Build Rust to WASM with wasm-pack
+4. Optimize WASM with wasm-opt
+5. Copy artifacts to build directory
+6. Calculate and display MD5 hash
+
+### Local Testing
+
+```bash
+make run            # Start local zkWasm service
+make test           # Run Rust tests
+```
+
+### Deployment to Production
+
+#### 1. Publish to zkWasm Hub
+
+```bash
+zkwasm publish      # Generate and run publish script
+```
+
+#### 2. Deployment Platform Setup
+
+For deployment to production platforms:
+
+```bash
+zkwasm check        # Verify deployment readiness
+```
+
+#### 3. GitHub CI/CD Setup
+
+For automated deployment:
+
+1. **Switch to deployment branch:**
+   ```bash
+   git checkout -b zkwasm-deploy
+   ```
+
+2. **Enable GitHub Actions:**
+   - Go to your repository settings
+   - Navigate to Actions tab
+   - Enable GitHub Actions workflows
+
+3. **Configure Container Registry:**
+   - Set up GitHub Container Registry (GCR) access
+   - Configure package settings for container images
+   - Ensure proper permissions for automated builds
+
+4. **Deploy:**
+   ```bash
+   git push origin zkwasm-deploy
+   ```
+
+The CI/CD pipeline will automatically:
+- Build the zkWasm application
+- Create container images
+- Push to GitHub Container Registry
+- Deploy to the target platform
+
+## Project Structure
+
+```
+{{projectName}}/
+├── src/                    # Rust source code
+│   ├── lib.rs             # Main library entry
+│   ├── state.rs           # State management
+│   ├── settlement.rs      # Settlement logic
+│   └── config.rs          # Configuration
+├── ts/                     # TypeScript service
+│   ├── src/               # TypeScript source files
+│   ├── package.json       # Node.js dependencies
+│   └── tsconfig.json      # TypeScript configuration
+├── build-artifacts/       # Build outputs
+├── Cargo.toml             # Rust configuration
+├── Makefile               # Build automation
+└── README.md              # This file
+```
+
+## Available Commands
+
+| Command | Description |
+|---------|-------------|
+| `zkwasm init` | Initialize development environment |
+| `zkwasm validate` | Validate project structure |
+| `zkwasm build` | Build the application |
+| `zkwasm check` | Check deployment readiness |
+| `zkwasm publish` | Generate/run publish script |
+| `make build` | Alternative build command |
+| `make run` | Run local service |
+| `make test` | Run tests |
+| `make clean` | Clean build artifacts |
+
+## Troubleshooting
+
+### Common Issues
+
+1. **TypeScript compilation errors:**
+   ```bash
+   cd ts && npm install && npx tsc
+   ```
+
+2. **WASM build failures:**
+   ```bash
+   rustup update
+   rustup target add wasm32-unknown-unknown
+   ```
+
+3. **Missing dependencies:**
+   ```bash
+   zkwasm init  # Reinstall development tools
+   ```
+
+## More Information
+
+For detailed documentation and advanced topics, visit:
+- **zkWasm Development Recipe**: https://development-recipe.zkwasm.ai/
+- **Getting Started Guide**: https://development-recipe.zkwasm.ai/getting-started/
+- **Core Concepts**: https://development-recipe.zkwasm.ai/core-documentation/
+- **Development Guide**: https://development-recipe.zkwasm.ai/development-guide/
+
+## Community
+
+- **Discord**: [Delphinus Labs Community](https://discord.gg/delphinus-labs)
+- **Telegram**: Contact Developer Relations Team for dev chat access
+- **GitHub**: [zkWasm Starter Repository](https://github.com/DelphinusLab/zkwasm-starter)
+
+---
+
+Generated with zkwasm-cli v1.0.0 

@@ -5,7 +5,7 @@ const service = new Service((txWitness, events) => {
 }, () => {
   return Promise.resolve();
 });
-service.initialize();
-service.serve();
+await service.initialize();
+await service.serve();
 
 

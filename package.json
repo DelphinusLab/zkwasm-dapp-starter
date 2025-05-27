@@ -1,0 +1,42 @@
+{
+  "name": "zkwasm-cli",
+  "version": "1.0.0",
+  "description": "A CLI tool for creating and managing zkWasm applications",
+  "type": "module",
+  "main": "cli/index.js",
+  "bin": {
+    "zkwasm": "./cli/index.js",
+    "zkwasm-cli": "./cli/index.js"
+  },
+  "scripts": {
+    "build": "make build",
+    "check": "node cli/check-deployment.js",
+    "template": "node cli/create-project.js"
+  },
+  "dependencies": {
+    "commander": "^11.0.0",
+    "inquirer": "^9.2.0",
+    "chalk": "^5.3.0",
+    "fs-extra": "^11.1.1",
+    "mustache": "^4.2.0",
+    "semver": "^7.5.4",
+    "zkwasm-service-helper": "^1.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "@types/node": "^20.14.2"
+  },
+  "keywords": [
+    "zkwasm",
+    "blockchain",
+    "zero-knowledge",
+    "wasm",
+    "cli",
+    "scaffold"
+  ],
+  "author": "Delphinus Lab",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+} 
