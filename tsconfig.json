@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "outDir": "./cli",
+    "rootDir": "./cli",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "allowJs": false,
+    "noEmitOnError": true,
+    "preserveConstEnums": true,
+    "removeComments": false
+  },
+  "include": [
+    "cli/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "ts",
+    "src",
+    "templates"
+  ]
+} 

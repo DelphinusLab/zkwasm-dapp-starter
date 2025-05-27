@@ -1,0 +1,35 @@
+# Source TypeScript files (we only need compiled JS)
+cli/*.ts
+tsconfig.json
+
+# Development files
+.git/
+.github/
+node_modules/
+*.log
+.DS_Store
+
+# Build artifacts (project-specific, not CLI)
+build-artifacts/
+pkg/
+target/
+
+# Test files
+test/
+tests/
+*.test.js
+*.test.ts
+
+# Documentation (keep README.md)
+docs/
+examples/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+tmp/
+temp/ 
