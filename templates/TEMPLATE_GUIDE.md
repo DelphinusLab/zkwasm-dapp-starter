@@ -185,25 +185,6 @@ Available variables for Mustache templating:
 4. **Test validation**: `zkwasm validate`
 5. **Test deployment check**: `zkwasm check`
 
-## Best Practices
-
-### Template Design
-
-| Practice | Description |
-|----------|-------------|
-| **Consistent Structure** | Follow the same directory layout |
-| **Clear Documentation** | Include template-specific README |
-| **Working Examples** | Ensure template builds successfully |
-| **Minimal Dependencies** | Only include necessary dependencies |
-
-### File Naming
-
-| Pattern | Usage |
-|---------|-------|
-| `*.template` | Files that need variable substitution |
-| `*.rs` | Direct copy Rust files |
-| `*.md` | Documentation files |
-
 ## Removing Templates
 
 To remove a template:
