@@ -1,4 +1,4 @@
-﻿# zkWasm CLI 🚀
+﻿# zkWasm DApp CLI 🚀
 
 A powerful scaffolding tool for zkWasm applications, similar to `vue-cli` and `create-react-app`, helping developers quickly create, manage, and deploy zkWasm applications.
 
@@ -9,7 +9,7 @@ A powerful scaffolding tool for zkWasm applications, similar to `vue-cli` and `c
 | 🎯 **Quick Project Generation** | Create new zkWasm projects from templates |
 | 🔍 **Smart Deployment Checks** | Automatic deployment readiness validation with MD5 verification |
 | ⚙️ **Environment Setup** | Automatic development environment configuration |
-| 📦 **Multiple Templates** | Support for Basic, Advanced, and DeFi project templates |
+| 📦 **Multiple Templates** | Support for Multiple project templates |
 | 🛠️ **Development Tools** | Built-in build, test, and validation tools |
 | 🚀 **CI/CD Ready** | Auto-generated GitHub Actions workflows |
 | 📋 **Publish Management** | Interactive publish script generation with error handling |
@@ -109,8 +109,8 @@ The CI/CD pipeline will automatically build, containerize, and deploy your zkWas
 | `init` | Initialize development environment and tools | 2nd |
 | `validate` | Validate project structure and configuration | 3rd (after TS setup) |
 | `build` | Build zkWasm application | 4th |
-| `check` | Check deployment readiness | 5th (before deploy) |
-| `publish` | Generate/run publish script for zkWasm hub | 6th |
+| `publish` | Generate/run publish script for zkWasm hub | 5th |
+| `check` | Check deployment readiness | 6th (after publish) |
 
 ### Command Details
 
@@ -119,12 +119,18 @@ The CI/CD pipeline will automatically build, containerize, and deploy your zkWas
 | Option | Description | Default |
 |--------|-------------|---------|
 | `-d, --directory <dir>` | Target directory | `.` |
-| `--skip-install` | Skip dependency installation | `false` |
+| `--skip-install` | Skip automatic npm install in ts/ directory | `false` |
 
-**Note:** After creation, you must manually install TypeScript dependencies:
+**Note:** The `--skip-install` option skips the automatic `npm install` in the TypeScript directory during project creation. If you use this option, you must manually install TypeScript dependencies:
 ```bash
 cd <project-name>/ts && npm install && npx tsc && cd ..
 ```
+
+**When to use `--skip-install`:**
+- When you want to review package.json before installing dependencies
+- In CI/CD environments where you control dependency installation
+- When you prefer to install dependencies manually
+- If you're experiencing network issues during project creation
 
 #### `zkwasm init`
 
@@ -374,32 +380,6 @@ Checking zkWasm hub...
 | **Windows** | • Use WSL2 or Git Bash<br>• May require administrator privileges |
 | **macOS** | • Use Homebrew for binaryen<br>• Ensure Xcode command line tools installed |
 
-## 📊 CI/CD Integration
-
-### GitHub Actions Example
-
-```yaml
-name: Build and Deploy
-on: [push, pull_request]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup Rust
-        uses: dtolnay/rust-toolchain@stable
-      - name: Install zkWasm CLI
-        run: npm install -g zkwasm-cli
-      - name: Initialize environment
-        run: zkwasm init
-      - name: Build
-        run: zkwasm build --release
-      - name: Check deployment
-        run: zkwasm check --verbose
-      - name: Validate project
-        run: zkwasm validate
-```
-
 ## 🤝 Contributing
 
 | Type | Description |
@@ -413,17 +393,10 @@ jobs:
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
-## 🆘 Support
-
-| Resource | Link |
-|----------|------|
-| **zkWasm Development Recipe** | [Complete Development Guide](https://development-recipe.zkwasm.ai/) |
-
 ## 📚 Documentation
 
 | Document | Description |
 |----------|-------------|
-| **[Development Workflow](DEVELOPMENT_WORKFLOW.md)** | Complete step-by-step development guide |
 | **[Template System](templates/)** | Template structure and customization |
 | **[CLI Reference](README.md#-cli-commands)** | Detailed command documentation |
 | **[zkWasm Development Recipe](https://development-recipe.zkwasm.ai/)** | Official comprehensive guide |
