@@ -2,6 +2,11 @@
 cli/*.ts
 tsconfig.json
 
+# TypeScript compilation artifacts
+cli/*.d.ts
+cli/*.d.ts.map
+cli/*.js.map
+
 # Development files
 .git/
 .github/

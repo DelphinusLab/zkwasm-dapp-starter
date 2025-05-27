@@ -17,13 +17,11 @@
     "template": "node cli/create-project.js"
   },
   "files": [
-    "cli/",
+    "cli/*.js",
     "templates/",
-    "src/",
-    "ts/",
     "Makefile",
     "rust-toolchain",
-    ".gitignore"
+    "README.md"
   ],
   "dependencies": {
     "chalk": "^5.3.0",
