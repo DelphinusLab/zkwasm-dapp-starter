@@ -47,7 +47,24 @@ export async function generatePublishScript() {
 }
 async function collectPublishConfig() {
     console.log(chalk.blue('⚙️  Configure publish parameters:\n'));
-    const questions = [
+    // First ask if user wants to use their own credentials
+    const { useOwnCredentials } = await inquirer.prompt([
+        {
+            type: 'confirm',
+            name: 'useOwnCredentials',
+            message: 'Use your own wallet credentials? (No = use shared public credentials)',
+            default: true
+        }
+    ]);
+    // Set default credentials based on user choice
+    const defaultAddress = useOwnCredentials
+        ? (process.env.ZKWASM_ADDRESS || '')
+        : '0xd8f157Cc95Bc40B4F0B58eb48046FebedbF26Bde';
+    const defaultPrivateKey = useOwnCredentials
+        ? (process.env.ZKWASM_PRIVATE_KEY || '')
+        : '2763537251e2f27dc6a30179e7bf1747239180f45b92db059456b7da8194995a';
+    // Base questions that are always asked
+    const baseQuestions = [
         {
             type: 'input',
             name: 'resturl',
@@ -65,19 +82,31 @@ async function collectPublishConfig() {
             name: 'circuit_size',
             message: 'Circuit size:',
             default: '22'
-        },
+        }
+    ];
+    // Credential questions (only ask if using own credentials)
+    const credentialQuestions = useOwnCredentials ? [
         {
             type: 'input',
             name: 'address',
             message: 'Wallet address (or set ZKWASM_ADDRESS env var):',
-            default: process.env.ZKWASM_ADDRESS || ''
+            default: defaultAddress
         },
         {
             type: 'password',
             name: 'priv',
             message: 'Private key (or set ZKWASM_PRIVATE_KEY env var):',
-            default: process.env.ZKWASM_PRIVATE_KEY || '',
+            default: defaultPrivateKey,
             mask: '*'
+        }
+    ] : [];
+    // Configuration questions
+    const configQuestions = [
+        {
+            type: 'input',
+            name: 'name',
+            message: 'Application name:',
+            default: 'zkwasm-app'
         },
         {
             type: 'input',
@@ -110,7 +139,17 @@ async function collectPublishConfig() {
             default: ''
         }
     ];
-    const answers = await inquirer.prompt(questions);
+    // Combine all questions
+    const allQuestions = [...baseQuestions, ...credentialQuestions, ...configQuestions];
+    const answers = await inquirer.prompt(allQuestions);
+    // If using shared credentials, add them to the answers
+    if (!useOwnCredentials) {
+        answers.address = defaultAddress;
+        answers.priv = defaultPrivateKey;
+        console.log(chalk.gray(`\n📝 Using shared public credentials:`));
+        console.log(chalk.gray(`   Address: ${defaultAddress}`));
+        console.log(chalk.gray(`   Private key: ${defaultPrivateKey.substring(0, 10)}...`));
+    }
     return {
         ...answers,
         auto_submit_network_ids: answers.auto_submit_network_ids || undefined,
@@ -127,6 +166,7 @@ set -e
 echo "🚀 Publishing to zkWasm hub..."
 
 # Configuration
+NAME="${config.name}"
 RESTURL="${config.resturl}"
 WASM_PATH="${config.path}"
 CIRCUIT_SIZE="${config.circuit_size}"
@@ -162,13 +202,14 @@ echo "🌐 Target endpoint: $RESTURL"
 echo "👤 Address: $ADDRESS"
 
 # Build command
-CMD="zkwasm-service-cli add-image \\
-    --resturl \\"$RESTURL\\" \\
-    --path \\"$WASM_PATH\\" \\
-    --circuit_size \\"$CIRCUIT_SIZE\\" \\
-    --address \\"$ADDRESS\\" \\
-    --priv \\"$PRIV\\" \\
-    --description \\"$DESCRIPTION\\" \\
+CMD="node node_modules/zkwasm-service-cli/dist/index.js addimage \\
+    -r \\"$RESTURL\\" \\
+    -p \\"$WASM_PATH\\" \\
+    -c \\"$CIRCUIT_SIZE\\" \\
+    -u \\"$ADDRESS\\" \\
+    -x \\"$PRIV\\" \\
+    -d \\"$DESCRIPTION\\" \\
+    -n \\"$NAME\\" \\
     --creator_paid_proof \\"$CREATOR_PAID_PROOF\\" \\
     --creator_only_add_prove_task \\"$CREATOR_ONLY_ADD_PROVE_TASK\\""
 

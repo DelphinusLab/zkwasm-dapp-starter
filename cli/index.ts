@@ -37,7 +37,6 @@ program
   .option('-d, --directory <dir>', 'Target directory', '.')
   .option('--skip-install', 'Skip npm install')
   .action(async (projectName: string, options: CreateOptions) => {
-    console.log(chalk.blue(`🚀 Creating zkWasm project: ${projectName}`));
     try {
       await createProject(projectName, options);
       console.log(chalk.green(`✅ Project ${projectName} created successfully!`));
@@ -52,7 +51,6 @@ program
   .description('Check deployment readiness')
   .option('-v, --verbose', 'Verbose output')
   .action(async (options: CheckOptions) => {
-    console.log(chalk.blue('🔍 Checking deployment readiness...'));
     try {
       const result = await checkDeployment(options);
     } catch (error) {
@@ -79,7 +77,6 @@ program
   .command('validate')
   .description('Validate current project structure')
   .action(async () => {
-    console.log(chalk.blue('🔍 Validating project structure...'));
     try {
       await validateProject();
       console.log(chalk.green('✅ Project structure is valid!'));

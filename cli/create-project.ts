@@ -116,7 +116,7 @@ async function collectProjectConfig(projectName: string, template: string): Prom
     {
       type: 'confirm',
       name: 'useGithubActions',
-      message: 'Setup GitHub Actions CI/CD?',
+      message: 'Setup GitHub Actions CI/CD for deployment?',
       default: true
     }
   ];
@@ -154,6 +154,21 @@ async function copyTemplateFiles(template: string, targetDir: string, config: Pr
   ];
   
   for (const file of templateFiles) {
+    const sourcePath = path.join(templateDir, file);
+    const targetPath = path.join(targetDir, file);
+    
+    if (await fs.pathExists(sourcePath)) {
+      await fs.copy(sourcePath, targetPath);
+      console.log(chalk.gray(`  ✓ Copied ${file} from template`));
+    }
+  }
+  
+  // Copy template-specific optional files
+  const templateOptionalFiles = [
+    'Cargo.lock'
+  ];
+  
+  for (const file of templateOptionalFiles) {
     const sourcePath = path.join(templateDir, file);
     const targetPath = path.join(targetDir, file);
     

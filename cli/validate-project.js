@@ -72,8 +72,9 @@ async function validateCargoToml(results) {
             results.errors.push('Cargo.toml missing [package] section');
             results.success = false;
         }
-        if (!cargoContent.includes('crate-type = ["cdylib"]')) {
-            results.warnings.push('Cargo.toml should include crate-type = ["cdylib"] for WASM');
+        // Check for crate-type containing "cdylib" (supports multiple types)
+        if (!cargoContent.includes('crate-type') || !cargoContent.includes('"cdylib"')) {
+            results.warnings.push('Cargo.toml should include crate-type with "cdylib" for WASM');
         }
         console.log(chalk.green('  ✅ Cargo.toml is valid'));
     }
@@ -85,10 +86,7 @@ async function validateCargoToml(results) {
 async function validatePackageJson(results) {
     try {
         const packageJson = await fs.readJson('ts/package.json');
-        if (!packageJson.name) {
-            results.errors.push('package.json missing name field');
-            results.success = false;
-        }
+        // Remove name field check - not required for template projects
         if (!packageJson.scripts) {
             results.warnings.push('package.json missing scripts section');
         }

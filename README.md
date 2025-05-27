@@ -295,6 +295,14 @@ my-zkwasm-app/
 | **Production** | `true` | Optimized builds | `make build` (includes wasm-opt) |
 | **Testing** | `false` | Test features enabled | `cargo build --features test` |
 
+**Note**: The `zkwasm build` command **always** performs production-level compilation and generates optimized WASM files, regardless of your environment configuration. For development and testing environments, use the generated scripts in the `./scripts/` directory:
+
+- **Development/Testing builds**: Use `./scripts/dev-build.sh` for fast, unoptimized builds
+- **Watch mode**: Use `./scripts/watch.sh` for auto-rebuild on file changes
+- **Production builds**: Use `zkwasm build` or `make build` for optimized, deployment-ready WASM
+
+Generate these scripts with `zkwasm init` command.
+
 ### zkwasm.config.json
 
 ```json

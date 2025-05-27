@@ -132,7 +132,6 @@ This will:
 
 ```bash
 make run            # Start local zkWasm service
-make test           # Run Rust tests
 ```
 
 ### Deployment to Production

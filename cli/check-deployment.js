@@ -138,7 +138,7 @@ async function checkZkWasmImage(results, verbose) {
         // Query zkWasm hub directly
         const imageInfo = await queryZkWasmImage(imageHash);
         if (!imageInfo || !imageInfo.checksum) {
-            results.errors.push(`Image not found: ${imageHash}. Please publish the image first using the publish.sh script in your local environment.`);
+            results.errors.push(`Image not found: ${imageHash}. Please publish the image first using the publish.sh script in your local environment or use zkwasm publish command.`);
             if (verbose) {
                 console.log(chalk.red(`  ❌ Image ${imageHash} not found on zkWasm hub`));
             }
