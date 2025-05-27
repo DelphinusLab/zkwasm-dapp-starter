@@ -1,6 +1,6 @@
 {
   "name": "zkwasm-cli",
-  "version": "1.0.1",
+  "version": "1.0.8",
   "description": "A CLI tool for creating and managing zkWasm applications",
   "type": "module",
   "main": "cli/index.js",
@@ -11,7 +11,6 @@
   "scripts": {
     "build": "make build",
     "compile": "tsc",
-    "postinstall": "npm run compile",
     "prepublishOnly": "npm run compile",
     "check": "node cli/check-deployment.js",
     "template": "node cli/create-project.js"
@@ -21,7 +20,9 @@
     "templates/",
     "Makefile",
     "rust-toolchain",
-    "README.md"
+    "README.md",
+    ".gitignore",
+    ".github/"
   ],
   "repository": {
     "type": "git",
@@ -37,8 +38,7 @@
     "fs-extra": "^11.1.1",
     "inquirer": "^9.2.0",
     "mustache": "^4.2.0",
-    "semver": "^7.5.4",
-    "zkwasm-service-helper": "^1.0.0"
+    "semver": "^7.5.4"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",

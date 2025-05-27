@@ -2,7 +2,6 @@ import chalk from 'chalk';
 import crypto from 'crypto';
 import fs from 'fs-extra';
 import path from 'path';
-import { ZkWasmServiceHelper } from "zkwasm-service-helper";
 const endpoint = "https://rpc.zkwasmhub.com:8090";
 export async function checkDeployment(options = {}) {
     const verbose = options.verbose || false;
@@ -101,6 +100,31 @@ async function checkWasmIntegrity(results, verbose) {
         results.errors.push(`Failed to calculate WASM hash: ${error.message}`);
     }
 }
+async function queryZkWasmImage(md5) {
+    try {
+        const url = `${endpoint}/image`;
+        const params = new URLSearchParams({ md5 });
+        const response = await fetch(`${url}?${params}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        const images = await response.json();
+        // Return the first image if found
+        if (Array.isArray(images) && images.length > 0) {
+            return images[0];
+        }
+        return null;
+    }
+    catch (error) {
+        throw new Error(`Failed to query zkWasm hub: ${error.message}`);
+    }
+}
 async function checkZkWasmImage(results, verbose) {
     if (verbose)
         console.log(chalk.blue('Checking zkWasm hub image availability...'));
@@ -111,9 +135,8 @@ async function checkZkWasmImage(results, verbose) {
         return;
     }
     try {
-        // Query zkWasm hub
-        const helper = new ZkWasmServiceHelper(endpoint, "", "");
-        const imageInfo = await helper.queryImage(imageHash);
+        // Query zkWasm hub directly
+        const imageInfo = await queryZkWasmImage(imageHash);
         if (!imageInfo || !imageInfo.checksum) {
             results.errors.push(`Image not found: ${imageHash}. Please publish the image first using the publish.sh script in your local environment.`);
             if (verbose) {
@@ -127,6 +150,12 @@ async function checkZkWasmImage(results, verbose) {
                 console.log(chalk.green(`  ✅ Image found on zkWasm hub: ${imageHash}`));
                 if (imageInfo.checksum) {
                     console.log(chalk.green(`  ✅ Image checksum: ${String(imageInfo.checksum)}`));
+                }
+                if (imageInfo.name) {
+                    console.log(chalk.green(`  ✅ Image name: ${imageInfo.name}`));
+                }
+                if (imageInfo.circuit_size) {
+                    console.log(chalk.green(`  ✅ Circuit size: ${imageInfo.circuit_size}`));
                 }
             }
         }

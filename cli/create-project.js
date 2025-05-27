@@ -4,6 +4,7 @@ import fs from 'fs-extra';
 import inquirer from 'inquirer';
 import Mustache from 'mustache';
 import path from 'path';
+import { fileURLToPath } from 'url';
 // Template system - currently only basic template is available
 // To add new templates:
 // 1. Add template definition to TEMPLATES object
@@ -93,7 +94,11 @@ async function collectProjectConfig(projectName, template) {
     };
 }
 async function copyTemplateFiles(template, targetDir, config) {
-    const templateDir = path.resolve('./templates', template);
+    // Get the directory where this script is located
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    // Template directory is relative to the CLI package installation
+    const templateDir = path.resolve(__dirname, '..', 'templates', template);
     console.log(chalk.blue('📁 Copying template files...'));
     // Check if template directory exists
     if (!await fs.pathExists(templateDir)) {
@@ -112,18 +117,28 @@ async function copyTemplateFiles(template, targetDir, config) {
             console.log(chalk.gray(`  ✓ Copied ${file} from template`));
         }
     }
-    // Copy common files from main directory
+    // Copy common files from package directory (one level up from cli/)
+    const packageDir = path.resolve(__dirname, '..');
     const commonFiles = [
         '.gitignore',
         'rust-toolchain',
         'Makefile'
     ];
     for (const file of commonFiles) {
-        const sourcePath = path.join('.', file);
+        const sourcePath = path.join(packageDir, file);
         const targetPath = path.join(targetDir, file);
         if (await fs.pathExists(sourcePath)) {
             await fs.copy(sourcePath, targetPath);
-            console.log(chalk.gray(`  ✓ Copied ${file} from main directory`));
+            console.log(chalk.gray(`  ✓ Copied ${file} from package directory`));
+        }
+    }
+    // Copy .github directory if GitHub Actions is enabled
+    if (config.useGithubActions) {
+        const githubSourcePath = path.join(packageDir, '.github');
+        const githubTargetPath = path.join(targetDir, '.github');
+        if (await fs.pathExists(githubSourcePath)) {
+            await fs.copy(githubSourcePath, githubTargetPath);
+            console.log(chalk.gray(`  ✓ Copied .github/ from package directory`));
         }
     }
     // Generate templated files
@@ -153,13 +168,6 @@ async function generateTemplatedFiles(targetDir, config, template, templateDir) 
     }
 }
 async function generateConfigFiles(targetDir, config) {
-    // Generate deployment history tracking file
-    const deploymentHistory = {
-        project: config.projectName,
-        created: new Date().toISOString(),
-        deployments: []
-    };
-    await fs.writeJson(path.join(targetDir, 'deployment-history.json'), deploymentHistory, { spaces: 2 });
     // Generate zkwasm config file
     const zkwasmConfig = {
         project: {
@@ -178,66 +186,12 @@ async function generateConfigFiles(targetDir, config) {
         }
     };
     await fs.writeJson(path.join(targetDir, 'zkwasm.config.json'), zkwasmConfig, { spaces: 2 });
-    // Generate GitHub Actions workflow if requested
-    if (config.useGithubActions) {
-        await generateGitHubActions(targetDir, config);
-    }
-}
-async function generateGitHubActions(targetDir, config) {
-    const workflowDir = path.join(targetDir, '.github', 'workflows');
-    await fs.ensureDir(workflowDir);
-    const workflow = `name: Build and Test
-
-on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Install Rust
-      uses: dtolnay/rust-toolchain@stable
-      with:
-        targets: wasm32-unknown-unknown
-    
-    - name: Install wasm-pack
-      run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-      
-    - name: Install wasm-opt
-      run: |
-        wget https://github.com/WebAssembly/binaryen/releases/latest/download/binaryen-version_108-x86_64-linux.tar.gz
-        tar -xzf binaryen-version_108-x86_64-linux.tar.gz
-        sudo cp binaryen-version_108/bin/wasm-opt /usr/local/bin/
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        
-    - name: Install TypeScript dependencies
-      run: cd ts && npm install
-      
-    - name: Build project
-      run: make build
-      
-    - name: Run tests
-      run: make test
-      
-    - name: Check deployment readiness
-      run: npx zkwasm-cli check --verbose
-`;
-    await fs.writeFile(path.join(workflowDir, 'build.yml'), workflow);
 }
 async function installDependencies(targetDir) {
     console.log(chalk.blue('📦 Installing dependencies...'));
-    return new Promise((resolve, reject) => {
-        const tsDir = path.join(targetDir, 'ts');
+    const tsDir = path.join(targetDir, 'ts');
+    // Install npm dependencies
+    await new Promise((resolve, reject) => {
         const npmInstall = spawn('npm', ['install'], {
             cwd: tsDir,
             stdio: 'pipe'
@@ -253,6 +207,26 @@ async function installDependencies(targetDir) {
         });
         npmInstall.on('error', (error) => {
             reject(new Error(`Failed to run npm install: ${error.message}`));
+        });
+    });
+    // Compile TypeScript
+    console.log(chalk.blue('🔧 Compiling TypeScript...'));
+    await new Promise((resolve, reject) => {
+        const tscCompile = spawn('npx', ['tsc'], {
+            cwd: tsDir,
+            stdio: 'pipe'
+        });
+        tscCompile.on('close', (code) => {
+            if (code === 0) {
+                console.log(chalk.green('✅ TypeScript compiled successfully'));
+                resolve();
+            }
+            else {
+                reject(new Error(`TypeScript compilation failed with code ${code}`));
+            }
+        });
+        tscCompile.on('error', (error) => {
+            reject(new Error(`Failed to run TypeScript compilation: ${error.message}`));
         });
     });
 }

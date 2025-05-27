@@ -15,21 +15,43 @@
 - Rust toolchain with wasm32-unknown-unknown target
 - wasm-pack and wasm-opt
 
-## Development Workflow
+## Quick Start
 
-### 1. Initial Setup
+The project has been automatically set up with:
+- ✅ TypeScript dependencies installed
+- ✅ TypeScript files compiled
+- ✅ Git repository initialized
+- ✅ GitHub Actions configured (if selected)
 
-After creating the project with `zkwasm create`, follow these steps:
+You can immediately start building:
 
 ```bash
-# Navigate to TypeScript directory and install dependencies
+cd {{projectName}}
+zkwasm build        # Build the zkWasm application
+zkwasm check        # Check deployment readiness
+```
+
+## Development Workflow
+
+### 1. Initial Setup (Already Done)
+
+When you ran `zkwasm create {{projectName}}`, the CLI automatically:
+- Installed all TypeScript dependencies (`npm install` in ts/ directory)
+- Compiled TypeScript files (`npx tsc` in ts/ directory)
+- Set up the project structure
+
+**⚠️ Important**: If you add new dependencies or modify TypeScript files, you'll need to manually reinstall and recompile:
+
+```bash
+# After adding new npm dependencies:
 cd ts
 npm install
-
-# Compile TypeScript files
 npx tsc
+cd ..
 
-# Return to project root
+# After modifying TypeScript files:
+cd ts
+npx tsc
 cd ..
 ```
 
@@ -71,14 +93,24 @@ zkwasm publish
 zkwasm check --verbose
 ```
 
-## Detailed Development Steps
+## Development Notes
 
-### TypeScript Setup
+### TypeScript Development
+
+The TypeScript service is located in the `ts/` directory. During project creation, the CLI automatically:
+1. Installed all dependencies with `npm install`
+2. Compiled TypeScript to JavaScript with `npx tsc`
+
+**When to manually reinstall/recompile:**
+- After adding new npm packages to `ts/package.json`
+- After modifying any `.ts` files in `ts/src/`
+- After updating TypeScript configuration in `ts/tsconfig.json`
 
 ```bash
+# Manual TypeScript workflow:
 cd ts
-npm install          # Install Node.js dependencies
-npx tsc             # Compile TypeScript to JavaScript
+npm install          # Only needed when adding new dependencies
+npx tsc             # Needed after any TypeScript changes
 cd ..
 ```
 
@@ -90,7 +122,7 @@ make build          # Complete build pipeline
 
 This will:
 1. Generate admin public key
-2. Compile TypeScript service
+2. Use pre-compiled TypeScript service (from ts/ directory)
 3. Build Rust to WASM with wasm-pack
 4. Optimize WASM with wasm-opt
 5. Copy artifacts to build directory

@@ -116,14 +116,42 @@ The CI/CD pipeline will automatically build, containerize, and deploy your zkWas
 
 #### `zkwasm create <project-name>`
 
+Creates a new zkWasm project with automatic setup:
+
 | Option | Description | Default |
 |--------|-------------|---------|
 | `-d, --directory <dir>` | Target directory | `.` |
-| `--skip-install` | Skip automatic npm install in ts/ directory | `false` |
+| `--skip-install` | Skip automatic npm install and TypeScript compilation | `false` |
 
-**Note:** The `--skip-install` option skips the automatic `npm install` in the TypeScript directory during project creation. If you use this option, you must manually install TypeScript dependencies:
+**Automatic Setup Process:**
+
+When you run `zkwasm create`, the CLI automatically:
+1. ✅ **Copies template files** (Rust source, TypeScript service, configuration)
+2. ✅ **Installs TypeScript dependencies** (`npm install` in ts/ directory)
+3. ✅ **Compiles TypeScript** (`npx tsc` in ts/ directory)
+4. ✅ **Initializes Git repository**
+5. ✅ **Sets up GitHub Actions** (if selected)
+
+**After project creation, you can immediately:**
 ```bash
-cd <project-name>/ts && npm install && npx tsc && cd ..
+cd <project-name>
+zkwasm build        # Build the zkWasm application
+zkwasm check        # Check deployment readiness
+```
+
+**⚠️ Important for Development:**
+
+The CLI automatically handles initial setup, but during development you'll need to manually reinstall/recompile when:
+- Adding new npm packages to `ts/package.json`
+- Modifying any `.ts` files in `ts/src/`
+- Updating TypeScript configuration
+
+```bash
+# After adding dependencies or modifying TypeScript:
+cd ts
+npm install         # Only needed when adding new dependencies
+npx tsc            # Needed after any TypeScript changes
+cd ..
 ```
 
 **When to use `--skip-install`:**
@@ -131,6 +159,11 @@ cd <project-name>/ts && npm install && npx tsc && cd ..
 - In CI/CD environments where you control dependency installation
 - When you prefer to install dependencies manually
 - If you're experiencing network issues during project creation
+
+**With `--skip-install`, you must manually run:**
+```bash
+cd <project-name>/ts && npm install && npx tsc && cd ..
+```
 
 #### `zkwasm init`
 
