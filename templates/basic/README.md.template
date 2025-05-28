@@ -210,7 +210,6 @@ The CI/CD pipeline will automatically:
 | `zkwasm publish` | Generate/run publish script |
 | `make build` | Alternative build command |
 | `make run` | Run local service |
-| `make test` | Run tests |
 | `make clean` | Clean build artifacts |
 
 ## Troubleshooting

@@ -132,13 +132,6 @@ When you run `zkwasm create`, the CLI automatically:
 4. ✅ **Initializes Git repository**
 5. ✅ **Sets up GitHub Actions** (if selected)
 
-**After project creation, you can immediately:**
-```bash
-cd <project-name>
-zkwasm build        # Build the zkWasm application
-zkwasm check        # Check deployment readiness
-```
-
 **⚠️ Important for Development:**
 
 The CLI automatically handles initial setup, but during development you'll need to manually reinstall/recompile when:
@@ -293,12 +286,11 @@ my-zkwasm-app/
 |-------------|----------|----------|---------------|
 | **Development** | `false` | Fast builds, debugging | `cargo build --target wasm32-unknown-unknown` |
 | **Production** | `true` | Optimized builds | `make build` (includes wasm-opt) |
-| **Testing** | `false` | Test features enabled | `cargo build --features test` |
+| **Testing** | `false` | Test features enabled | `cargo build --target wasm32-unknown-unknown --features test` |
 
 **Note**: The `zkwasm build` command **always** performs production-level compilation and generates optimized WASM files, regardless of your environment configuration. For development and testing environments, use the generated scripts in the `./scripts/` directory:
 
 - **Development/Testing builds**: Use `./scripts/dev-build.sh` for fast, unoptimized builds
-- **Watch mode**: Use `./scripts/watch.sh` for auto-rebuild on file changes
 - **Production builds**: Use `zkwasm build` or `make build` for optimized, deployment-ready WASM
 
 Generate these scripts with `zkwasm init` command.
@@ -375,22 +367,13 @@ Checking zkWasm hub...
 | `ZKWASM_ADDRESS` | Wallet address for publishing |
 | `ZKWASM_PRIVATE_KEY` | Private key for signing |
 
-### Error Handling
-
-| Error Type | Detection | Response |
-|------------|-----------|---------|
-| **Already Exists** | Output contains "already exists" | ℹ️ Friendly message, exit 0 |
-| **Network Error** | Non-zero exit code | ❌ Error message, exit with code |
-| **Invalid Config** | Missing parameters | ⚠️ Validation error |
-
 ## 🛠️ Development Tools
 
 ### Built-in Scripts
 
 | Script | Purpose | Location |
 |--------|---------|----------|
-| `dev-build.sh` | Development builds | `./scripts/` |
-| `watch.sh` | File watching | `./scripts/` |
+| `dev-build.sh` | Development builds | `./scripts/` (generated) |
 | `publish.sh` | Publishing | `./ts/` (generated) |
 
 ### Required Tools

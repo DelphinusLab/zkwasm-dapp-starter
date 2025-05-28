@@ -46,10 +46,8 @@ program
     .command('init')
     .description('Initialize zkWasm configuration')
     .action(async () => {
-    console.log(chalk.blue('⚙️  Initializing zkWasm configuration...'));
     try {
         await initConfig();
-        console.log(chalk.green('✅ Configuration initialized!'));
     }
     catch (error) {
         console.error(chalk.red(`❌ Error initializing config: ${error.message}`));

@@ -231,6 +231,10 @@ if [ "${config.environment}" = "development" ]; then
     echo "📦 Building in development mode..."
     cargo build --target wasm32-unknown-unknown
     wasm-pack build --dev --out-name application --out-dir pkg
+elif [ "${config.environment}" = "testing" ]; then
+    echo "📦 Building in testing mode..."
+    cargo build --target wasm32-unknown-unknown --features test
+    wasm-pack build --dev --out-name application --out-dir pkg --features test
 else
     echo "📦 Building in production mode..."
     make build
@@ -243,22 +247,6 @@ echo "✅ Build completed successfully!"
 `;
     await fs.writeFile(path.join(scriptsDir, 'dev-build.sh'), devBuildScript);
     await fs.chmod(path.join(scriptsDir, 'dev-build.sh'), '755');
-    // Create watch script for development
-    const watchScript = `#!/bin/bash
-# Development watch script
-echo "👀 Watching for changes..."
-
-# Install watchexec if not available
-if ! command -v watchexec &> /dev/null; then
-    echo "📦 Installing watchexec..."
-    cargo install watchexec-cli
-fi
-
-# Watch Rust files and rebuild
-watchexec -w src -w Cargo.toml -e rs,toml ./scripts/dev-build.sh
-`;
-    await fs.writeFile(path.join(scriptsDir, 'watch.sh'), watchScript);
-    await fs.chmod(path.join(scriptsDir, 'watch.sh'), '755');
     console.log(chalk.green('✅ Development scripts created in ./scripts/'));
 }
 //# sourceMappingURL=init-config.js.map
