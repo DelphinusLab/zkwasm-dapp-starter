@@ -4,212 +4,137 @@
 
 The zkWasm CLI uses a modular template system that allows developers to create different types of zkWasm applications. Currently, only the **Basic Hello World** template is available, but the system is designed for easy extension.
 
-## Current Template
+## Current Templates
 
-### Basic Hello World Template
-- **Location**: Uses current `src/` directory as template source
-- **Features**: 
-  - Basic state management (`src/state.rs`)
-  - Settlement logic (`src/settlement.rs`)
-  - Configuration management (`src/config.rs`)
-  - Main library entry (`src/lib.rs`)
-  - Admin public key (`src/admin.pubkey`)
+### Basic Template
+- **Location**: `templates/basic/`
+- **Use Case**: Learning and getting started with zkWasm
+- **Features**: Basic Rust zkWasm module, TypeScript service, state management, settlement logic
 
-## Adding New Templates
+## Template Structure
 
-### Step 1: Define Template Configuration
+Each template consists of:
 
-Edit `cli/create-project.js` and add your template to the `TEMPLATES` object:
-
+### 1. Template Definition
 ```javascript
+// In cli/create-project.ts
 const TEMPLATES = {
   basic: {
     name: 'Basic zkWasm Hello World',
     description: 'Simple zkWasm application with basic functionality',
-    features: ['State management', 'Settlement logic']
+    features: ['Rust zkWasm module', 'TypeScript service', 'Basic state management', 'Settlement logic']
   },
-  // Add your new template here
+  // Future templates:
   advanced: {
     name: 'Advanced zkWasm App',
     description: 'Production-ready zkWasm application with advanced features',
-    features: ['Advanced state management', 'Custom settlement', 'Optimizations']
+    features: ['Advanced state management', 'Multi-contract support', 'Optimized performance']
   },
   defi: {
     name: 'DeFi zkWasm App',
     description: 'DeFi-focused zkWasm application',
-    features: ['Token operations', 'Liquidity pools', 'Price oracles']
+    features: ['Token management', 'Liquidity pools', 'Yield farming']
   }
 };
 ```
 
-### Step 2: Create Template Files
-
-Create a directory structure for your template:
-
+### 2. Template Files
 ```
-templates/
-├── advanced/
+templates/basic/
+├── src/                    # Rust source code
+│   ├── lib.rs
+│   ├── state.rs
+│   └── config.rs
+├── ts/                     # TypeScript service
 │   ├── src/
-│   │   ├── lib.rs
-│   │   ├── state.rs
-│   │   ├── settlement.rs
-│   │   ├── advanced_features.rs
-│   │   └── config.rs
-│   ├── ts/
-│   │   ├── src/
-│   │   └── package.json.template
-│   └── Cargo.toml.template
-└── defi/
-    ├── src/
-    │   ├── lib.rs
-    │   ├── token.rs
-    │   ├── pool.rs
-    │   └── oracle.rs
-    └── contracts/
-        └── defi_logic.rs
+│   ├── package.json
+│   └── tsconfig.json
+├── Cargo.toml.template     # Templated Cargo configuration
+└── README.md.template      # Templated documentation
 ```
 
-### Step 3: Update Template Generation Logic
+### 3. Template Variables
+Templates use Mustache templating for dynamic content:
 
-Modify the `generateTemplatedFiles()` function in `cli/create-project.js`:
+```mustache
+# {{projectName}}
+
+{{description}}
+
+## Features
+{{#templateFeatures}}
+- {{.}}
+{{/templateFeatures}}
+```
+
+## Adding New Templates
+
+### Step 1: Create Template Directory
+```bash
+mkdir templates/your-template-name
+```
+
+### Step 2: Add Template Files
+Create the basic structure:
+```
+templates/your-template-name/
+├── src/                    # Rust source code
+├── ts/                     # TypeScript service  
+├── Cargo.toml.template     # Templated Cargo.toml
+└── README.md.template      # Templated README
+```
+
+### Step 3: Update Template Registry
+Add your template to the `TEMPLATES` object in `cli/create-project.ts`:
 
 ```javascript
-async function generateTemplatedFiles(targetDir, config, template) {
-  console.log(chalk.blue('🔧 Generating configuration files...'));
-  
-  // Template-specific Cargo.toml generation
-  let cargoTemplate;
-  
-  switch (template) {
-    case 'basic':
-      cargoTemplate = `[package]
-name = "{{rustCrateName}}"
-version = "{{version}}"
-# ... basic dependencies
-`;
-      break;
-      
-    case 'advanced':
-      cargoTemplate = `[package]
-name = "{{rustCrateName}}"
-version = "{{version}}"
-# ... advanced dependencies
-[dependencies]
-# ... additional advanced dependencies
-`;
-      break;
-      
-    case 'defi':
-      cargoTemplate = `[package]
-name = "{{rustCrateName}}"
-version = "{{version}}"
-# ... DeFi-specific dependencies
-[dependencies]
-num-bigint = "0.4"
-# ... other DeFi dependencies
-`;
-      break;
+const TEMPLATES = {
+  // ... existing templates
+  'your-template': {
+    name: 'Your Template Name',
+    description: 'Description of your template',
+    features: ['Feature 1', 'Feature 2', 'Feature 3']
   }
-  
-  const cargoContent = Mustache.render(cargoTemplate, config);
-  await fs.writeFile(path.join(targetDir, 'Cargo.toml'), cargoContent);
-}
+};
 ```
 
-### Step 4: Update CLI Command
-
-Restore the template option in `cli/index.js`:
+### Step 4: Update CLI Command (Future)
+When multiple templates are available, update the CLI to allow template selection:
 
 ```javascript
+// In cli/index.ts
 program
-  .command('create <project-name>')
+  .command('create <name>')
   .description('Create a new zkWasm project')
-  .option('-t, --template <template>', 'Project template (basic, advanced, defi)', 'basic')
-  .option('-d, --directory <dir>', 'Target directory', '.')
-  .option('--skip-install', 'Skip npm install')
-  .action(async (projectName, options) => {
-    // ... existing logic
+  .option('-t, --template <template>', 'Template to use', 'basic')
+  .action((name, options) => {
+    createProject(name, options);
   });
 ```
 
-### Step 5: Update Template Selection Logic
+### Step 5: Test Your Template
+1. **Create test project**: `zkwasm-dapp create test-app --template your-template`
+2. **Validate structure**: `cd test-app && zkwasm-dapp validate`
+3. **Test build**: `cd test-app && zkwasm-dapp build`
+4. **Test validation**: `zkwasm-dapp validate`
+5. **Test deployment check**: `zkwasm-dapp check`
 
-Modify the `createProject()` function to handle multiple templates:
+## Template Variables
 
-```javascript
-export async function createProject(projectName, options) {
-  // ... existing code ...
-  
-  // Restore template selection
-  const template = options.template || 'basic';
-  if (!TEMPLATES[template]) {
-    throw new Error(`Unknown template: ${template}. Available: ${Object.keys(TEMPLATES).join(', ')}`);
-  }
-  
-  console.log(chalk.blue(`Using template: ${TEMPLATES[template].name}`));
-  
-  // ... rest of the function
-}
-```
-
-## Template File Structure
-
-### Required Files for Each Template
-
-| File | Purpose | Required |
-|------|---------|----------|
-| `src/lib.rs` | Main Rust entry point | ✅ |
-| `src/state.rs` | State management | ✅ |
-| `src/config.rs` | Configuration | ✅ |
-| `Cargo.toml.template` | Rust dependencies | ✅ |
-| `ts/package.json.template` | TypeScript dependencies | ✅ |
-| `README.md.template` | Project documentation | ⚠️ Recommended |
-
-### Template Variables
-
-Available variables for Mustache templating:
-
-| Variable | Description | Example |
+### Available Variables
+| Variable | Description | Default |
 |----------|-------------|---------|
-| `{{projectName}}` | Original project name | `my-zkwasm-app` |
-| `{{rustCrateName}}` | Rust-compatible name | `my_zkwasm_app` |
+| `{{projectName}}` | Project name | User input |
+| `{{description}}` | Project description | User input |
 | `{{author}}` | Author name | `zkWasm Developer` |
 | `{{description}}` | Project description | `A zkWasm application` |
 | `{{version}}` | Initial version | `0.1.0` |
+| `{{rustCrateName}}` | Rust crate name | Sanitized project name |
+| `{{wasmModuleName}}` | WASM module name | `{project}_bg` |
 
-## Testing New Templates
-
-1. **Create test project**: `zkwasm create test-app --template your-template`
-2. **Verify structure**: Check all files are generated correctly
-3. **Test build**: `cd test-app && zkwasm build`
-4. **Test validation**: `zkwasm validate`
-5. **Test deployment check**: `zkwasm check`
-
-## Removing Templates
-
-To remove a template:
-
-1. Remove from `TEMPLATES` object in `cli/create-project.js`
-2. Delete template directory from `templates/`
-3. Remove template-specific logic from `generateTemplatedFiles()`
-4. Update documentation
-
-## Current Status
-
-- ✅ **Basic Template**: Available (uses current `src/`)
-- ⏳ **Advanced Template**: Planned
-- ⏳ **DeFi Template**: Planned
-- ⏳ **Custom Templates**: Community contributions welcome
-
-## Contributing Templates
-
-To contribute a new template:
-
-1. Fork the repository
-2. Create your template following this guide
-3. Test thoroughly
-4. Submit a pull request with:
-   - Template files
-   - Documentation
-   - Test results
-   - Example usage 
+### Template Features Loop
+```mustache
+{{#templateFeatures}}
+- {{.}}
+{{/templateFeatures}}
+```

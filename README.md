@@ -21,17 +21,17 @@ A powerful scaffolding tool for zkWasm applications, similar to `vue-cli` and `c
 | Method | Command | Notes |
 |--------|---------|-------|
 | **Global Install** | `npm install -g zkwasm-cli` | Recommended |
-| **Local Install** | `npm install zkwasm-cli` | Use with `npx zkwasm` |
+| **Local Install** | `npm install zkwasm-cli` | Use with `npx zkwasm-dapp` |
 | **From Source** | `git clone && npm install && npm link` | Development |
 
 ### Create Your First Project
 
 ```bash
 # Create a basic Hello World project
-zkwasm create my-zkwasm-app
+zkwasm-dapp create my-zkwasm-app
 
 # Create in specific directory
-zkwasm create my-app --directory ./projects
+zkwasm-dapp create my-app --directory ./projects
 ```
 
 ### Development Workflow
@@ -40,7 +40,7 @@ zkwasm create my-app --directory ./projects
 cd my-zkwasm-app
 
 # 1. Initialize development environment
-zkwasm init
+zkwasm-dapp init
 
 # 2. Install TypeScript dependencies and compile
 cd ts
@@ -49,32 +49,32 @@ npx tsc
 cd ..
 
 # 3. Validate project structure
-zkwasm validate
+zkwasm-dapp validate
 
 # 4. Build the application
-zkwasm build
+zkwasm-dapp build
 
 # 5. Run locally (optional)
 make run
 
 # 6. Generate and run publish script
-zkwasm publish
+zkwasm-dapp publish
 
 # 7. Check deployment readiness
-zkwasm check --verbose
+zkwasm-dapp check --verbose
 ```
 
 ### Complete Development Process
 
 | Step | Command | Description |
 |------|---------|-------------|
-| **1. Setup** | `zkwasm init` | Initialize development environment |
+| **1. Setup** | `zkwasm-dapp init` | Initialize development environment |
 | **2. Dependencies** | `cd ts && npm install && npx tsc && cd ..` | Install and compile TypeScript |
-| **3. Validate** | `zkwasm validate` | Validate project structure |
-| **4. Build** | `zkwasm build` | Build zkWasm application |
+| **3. Validate** | `zkwasm-dapp validate` | Validate project structure |
+| **4. Build** | `zkwasm-dapp build` | Build zkWasm application |
 | **5. Test** | `make run` | Run local service for testing |
-| **6. Publish** | `zkwasm publish` | Generate/run publish script |
-| **7. Deploy Check** | `zkwasm check` | Verify deployment readiness |
+| **6. Publish** | `zkwasm-dapp publish` | Generate/run publish script |
+| **7. Deploy Check** | `zkwasm-dapp check` | Verify deployment readiness |
 
 ### GitHub CI/CD Deployment
 
@@ -114,7 +114,7 @@ The CI/CD pipeline will automatically build and containerize your zkWasm applica
 
 ### Command Details
 
-#### `zkwasm create <project-name>`
+#### `zkwasm-dapp create <project-name>`
 
 Creates a new zkWasm project with automatic setup:
 
@@ -125,7 +125,7 @@ Creates a new zkWasm project with automatic setup:
 
 **Automatic Setup Process:**
 
-When you run `zkwasm create`, the CLI automatically:
+When you run `zkwasm-dapp create`, the CLI automatically:
 1. ✅ **Copies template files** (Rust source, TypeScript service, configuration)
 2. ✅ **Installs TypeScript dependencies** (`npm install` in ts/ directory)
 3. ✅ **Compiles TypeScript** (`npx tsc` in ts/ directory)
@@ -158,7 +158,7 @@ cd ..
 cd <project-name>/ts && npm install && npx tsc && cd ..
 ```
 
-#### `zkwasm init`
+#### `zkwasm-dapp init`
 
 Initializes the development environment by:
 - Checking for required tools (Rust, wasm-pack, wasm-opt, Node.js)
@@ -166,7 +166,7 @@ Initializes the development environment by:
 - Configuring project settings
 - Creating development scripts
 
-#### `zkwasm validate`
+#### `zkwasm-dapp validate`
 
 Validates project readiness by checking:
 - Directory structure completeness
@@ -174,7 +174,7 @@ Validates project readiness by checking:
 - Dependency resolution
 - TypeScript compilation status
 
-#### `zkwasm build`
+#### `zkwasm-dapp build`
 
 Builds the complete application:
 - Compiles Rust to WebAssembly
@@ -183,7 +183,7 @@ Builds the complete application:
 - Calculates MD5 hash for deployment tracking
 - Copies artifacts to build directory
 
-#### `zkwasm check`
+#### `zkwasm-dapp check`
 
 Checks deployment readiness by validating:
 - Build artifacts (WASM file, TypeScript definitions)
@@ -193,7 +193,7 @@ Checks deployment readiness by validating:
 - Dependencies (Rust and Node.js dependency resolution)
 - Environment (required tools availability)
 
-#### `zkwasm publish`
+#### `zkwasm-dapp publish`
 
 Generates and manages publish scripts by:
 - Creating customizable publish.sh scripts
@@ -276,7 +276,7 @@ my-zkwasm-app/
 └── README.md              # Project documentation
 ```
 
-## ⚙️ Configuration (zkwasm init)
+## ⚙️ Configuration (zkwasm-dapp init)
 
 ### Environment Configuration
 
@@ -286,12 +286,12 @@ my-zkwasm-app/
 | **Production** | `true` | Optimized builds | `make build` (includes wasm-opt) |
 | **Testing** | `false` | Test features enabled | `cargo build --target wasm32-unknown-unknown --features test` |
 
-**Note**: The `zkwasm build` command **always** performs production-level compilation and generates optimized WASM files, regardless of your environment configuration. For development and testing environments, use the generated scripts in the `./scripts/` directory:
+**Note**: The `zkwasm-dapp build` command **always** performs production-level compilation and generates optimized WASM files, regardless of your environment configuration. For development and testing environments, use the generated scripts in the `./scripts/` directory:
 
 - **Development/Testing builds**: Use `./scripts/dev-build.sh` for fast, unoptimized builds
-- **Production builds**: Use `zkwasm build` or `make build` for optimized, deployment-ready WASM
+- **Production builds**: Use `zkwasm-dapp build` or `make build` for optimized, deployment-ready WASM
 
-Generate these scripts with `zkwasm init` command.
+Generate these scripts with `zkwasm-dapp init` command.
 
 ### zkwasm.config.json
 
@@ -310,7 +310,7 @@ Generate these scripts with `zkwasm init` command.
 }
 ```
 
-## 🔍 Deployment Checks (zkwasm check)
+## 🔍 Deployment Checks (zkwasm-dapp check)
 
 ### Check Categories
 
@@ -341,7 +341,7 @@ Checking zkWasm hub...
 📋 Summary: ✅ 8 passed, ⚠️ 0 warnings, ❌ 0 errors
 ```
 
-## 🚀 Publishing (zkwasm publish)
+## 🚀 Publishing (zkwasm-dapp publish)
 
 ### Publish Script Configuration
 
@@ -391,8 +391,8 @@ Checking zkWasm hub...
 |-------|----------|----------|
 | **Build Failure** | `wasm-pack build` fails | • Update Rust: `rustup update`<br>• Add target: `rustup target add wasm32-unknown-unknown` |
 | **Dependency Error** | npm install fails | • Clear cache: `npm cache clean --force`<br>• Remove node_modules and reinstall |
-| **Environment Issues** | Tools not found | • Run `zkwasm init`<br>• Check PATH configuration |
-| **Check Failures** | Deployment check errors | • Run `zkwasm check --verbose`<br>• Validate with `zkwasm validate` |
+| **Environment Issues** | Tools not found | • Run `zkwasm-dapp init`<br>• Check PATH configuration |
+| **Check Failures** | Deployment check errors | • Run `zkwasm-dapp check --verbose`<br>• Validate with `zkwasm-dapp validate` |
 
 ### Platform-Specific Notes
 

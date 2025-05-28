@@ -27,13 +27,13 @@ You can immediately start building:
 
 ```bash
 cd {{projectName}}
-zkwasm build        # Build the zkWasm application
+zkwasm-dapp build        # Build the zkWasm application
 ```
 ## Development Workflow
 
 ### 1. Initial Setup (Already Done)
 
-When you ran `zkwasm create {{projectName}}`, the CLI automatically:
+When you ran `zkwasm-dapp create {{projectName}}`, the CLI automatically:
 - Installed all TypeScript dependencies (`npm install` in ts/ directory)
 - Compiled TypeScript files (`npx tsc` in ts/ directory)
 - Set up the project structure
@@ -57,14 +57,14 @@ cd ..
 
 ```bash
 # Validate project configuration and dependencies
-zkwasm validate
+zkwasm-dapp validate
 ```
 
 ### 3. Build the Application
 
 ```bash
 # Build the zkWasm application
-zkwasm build
+zkwasm-dapp build
 # or alternatively: make build
 ```
 
@@ -85,10 +85,10 @@ make run
 
 ```bash
 # Generate publish script for zkWasm hub deployment and optionally execute it.
-zkwasm publish
+zkwasm-dapp publish
 
 # Check deployment readiness
-zkwasm check --verbose
+zkwasm-dapp check --verbose
 ```
 
 ## Development Notes
@@ -124,7 +124,7 @@ make run            # Start local zkWasm service
 #### 1. Publish to zkWasm Hub
 
 ```bash
-zkwasm publish      # Generate and run publish script
+zkwasm-dapp publish      # Generate and run publish script
 ```
 
 #### 2. Deployment Platform Setup
@@ -132,7 +132,7 @@ zkwasm publish      # Generate and run publish script
 For deployment to production platforms:
 
 ```bash
-zkwasm check        # Verify deployment readiness
+zkwasm-dapp check        # Verify deployment readiness
 ```
 
 #### 3. GitHub CI/CD Setup
@@ -189,11 +189,11 @@ After successful GitHub Container Registry package build, you can deploy your ap
 
 | Command | Description |
 |---------|-------------|
-| `zkwasm init` | Initialize development environment |
-| `zkwasm validate` | Validate project structure |
-| `zkwasm build` | Build the application |
-| `zkwasm check` | Check deployment readiness |
-| `zkwasm publish` | Generate/run publish script |
+| `zkwasm-dapp init` | Initialize development environment |
+| `zkwasm-dapp validate` | Validate project structure |
+| `zkwasm-dapp build` | Build the application |
+| `zkwasm-dapp check` | Check deployment readiness |
+| `zkwasm-dapp publish` | Generate/run publish script |
 | `make build` | Alternative build command |
 | `make run` | Run local service |
 | `make clean` | Clean build artifacts |
@@ -204,4 +204,4 @@ For detailed documentation and advanced topics, visit:
 - **zkWasm Development Recipe**: https://development-recipe.zkwasm.ai/
 ---
 
-Generated with zkwasm-cli v1.0.0 
+Generated with zkwasm-cli v1.0.0

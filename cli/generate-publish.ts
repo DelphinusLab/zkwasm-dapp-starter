@@ -30,11 +30,10 @@ export async function generatePublishScript(): Promise<void> {
   await fs.writeFile(scriptPath, script);
   await fs.chmod(scriptPath, '755');
   
-  console.log(chalk.green(`✅ Publish script generated: ${scriptPath}`));
+  console.log(chalk.green('\n✅ Publish script generated successfully!'));
   console.log(chalk.blue('\n📖 Usage:'));
-  console.log('   cd ts && ./publish.sh');
-  console.log('   # or');
-  console.log('   zkwasm publish');
+  console.log('   ./ts/publish.sh     # Run the script directly');
+  console.log('   zkwasm-dapp publish');
   
   // Ask if user wants to run the script now
   const { runNow } = await inquirer.prompt([
@@ -276,7 +275,7 @@ elif [ $EXIT_CODE -ne 0 ]; then
 else
     echo ""
     echo "✅ Image published successfully!"
-    echo "🔍 You can now run 'zkwasm check' to verify deployment readiness"
+    echo "🔍 You can now run 'zkwasm-dapp check' to verify deployment readiness"
 fi
 `;
 

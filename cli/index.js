@@ -11,7 +11,7 @@ import { initConfig } from './init-config.js';
 import { validateProject } from './validate-project.js';
 const program = new Command();
 program
-    .name('zkwasm')
+    .name('zkwasm-dapp')
     .description('CLI tool for creating and managing zkWasm applications')
     .version('1.0.0');
 program
