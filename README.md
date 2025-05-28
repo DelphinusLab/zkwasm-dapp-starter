@@ -99,7 +99,7 @@ For automated deployment to production platforms:
    git push origin zkwasm-deploy
    ```
 
-The CI/CD pipeline will automatically build, containerize, and deploy your zkWasm application.
+The CI/CD pipeline will automatically build and containerize your zkWasm application on Github Container Registry. After successful GitHub Container Registry package build, you can deploy your application using the zkWasm deployment platform at [https://deployment.zkwasmhub.com/](https://deployment.zkwasmhub.com/).
 
 ## 📋 CLI Commands
 
@@ -185,24 +185,22 @@ Builds the complete application:
 
 #### `zkwasm check`
 
-| Check Category | Items Verified |
-|----------------|----------------|
-| **Build Artifacts** | WASM file, TypeScript definitions |
-| **File Integrity** | MD5 hash calculation and verification |
-| **zkWasm Hub** | Image existence check via API |
-| **Configuration** | Cargo.toml, package.json, tsconfig.json |
-| **Dependencies** | Rust and Node.js dependency resolution |
-| **Environment** | Required tools availability |
+Checks deployment readiness by validating:
+- Build artifacts (WASM file, TypeScript definitions)
+- File integrity (MD5 hash calculation and verification)
+- zkWasm hub connectivity (image existence check via API)
+- Configuration files (Cargo.toml, package.json, tsconfig.json)
+- Dependencies (Rust and Node.js dependency resolution)
+- Environment (required tools availability)
 
 #### `zkwasm publish`
 
-| Feature | Description |
-|---------|-------------|
-| **Script Generation** | Creates customizable publish.sh scripts |
-| **Environment Variables** | Supports ZKWASM_ADDRESS and ZKWASM_PRIVATE_KEY |
-| **Error Handling** | Detects "already exists" errors gracefully |
-| **Migration Support** | Optional data import from existing images |
-| **Network Configuration** | Auto-submit to specified network IDs |
+Generates and manages publish scripts by:
+- Creating customizable publish.sh scripts
+- Supporting environment variables (ZKWASM_ADDRESS, ZKWASM_PRIVATE_KEY)
+- Detecting "already exists" errors gracefully
+- Providing migration support (optional data import from existing images)
+- Configuring network auto-submission to specified network IDs
 
 ## 📁 Project Templates
 
@@ -278,7 +276,7 @@ my-zkwasm-app/
 └── README.md              # Project documentation
 ```
 
-## ⚙️ Configuration
+## ⚙️ Configuration (zkwasm init)
 
 ### Environment Configuration
 
@@ -312,7 +310,7 @@ Generate these scripts with `zkwasm init` command.
 }
 ```
 
-## 🔍 Deployment Checks
+## 🔍 Deployment Checks (zkwasm check)
 
 ### Check Categories
 
@@ -343,7 +341,7 @@ Checking zkWasm hub...
 📋 Summary: ✅ 8 passed, ⚠️ 0 warnings, ❌ 0 errors
 ```
 
-## 🚀 Publishing
+## 🚀 Publishing (zkwasm publish)
 
 ### Publish Script Configuration
 

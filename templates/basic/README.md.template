@@ -28,9 +28,7 @@ You can immediately start building:
 ```bash
 cd {{projectName}}
 zkwasm build        # Build the zkWasm application
-zkwasm check        # Check deployment readiness
 ```
-
 ## Development Workflow
 
 ### 1. Initial Setup (Already Done)
@@ -86,7 +84,7 @@ make run
 ### 5. Deployment Preparation
 
 ```bash
-# Generate publish script for zkWasm hub
+# Generate publish script for zkWasm hub deployment and optionally execute it.
 zkwasm publish
 
 # Check deployment readiness
@@ -101,19 +99,6 @@ The TypeScript service is located in the `ts/` directory. During project creatio
 1. Installed all dependencies with `npm install`
 2. Compiled TypeScript to JavaScript with `npx tsc`
 
-**When to manually reinstall/recompile:**
-- After adding new npm packages to `ts/package.json`
-- After modifying any `.ts` files in `ts/src/`
-- After updating TypeScript configuration in `ts/tsconfig.json`
-
-```bash
-# Manual TypeScript workflow:
-cd ts
-npm install          # Only needed when adding new dependencies
-npx tsc             # Needed after any TypeScript changes
-cd ..
-```
-
 ### Build Process
 
 ```bash
@@ -121,7 +106,7 @@ make build          # Complete build pipeline
 ```
 
 This will:
-1. Generate admin public key
+1. Generate admin public key from the default admin key or the one you specified in the .env file
 2. Use pre-compiled TypeScript service (from ts/ directory)
 3. Build Rust to WASM with wasm-pack
 4. Optimize WASM with wasm-opt
@@ -178,7 +163,8 @@ The CI/CD pipeline will automatically:
 - Build the zkWasm application
 - Create container images
 - Push to GitHub Container Registry
-- Deploy to the target platform
+
+After successful GitHub Container Registry package build, you can deploy your application using the zkWasm deployment platform at [https://deployment.zkwasmhub.com/](https://deployment.zkwasmhub.com/).
 
 ## Project Structure
 
@@ -212,40 +198,10 @@ The CI/CD pipeline will automatically:
 | `make run` | Run local service |
 | `make clean` | Clean build artifacts |
 
-## Troubleshooting
-
-### Common Issues
-
-1. **TypeScript compilation errors:**
-   ```bash
-   cd ts && npm install && npx tsc
-   ```
-
-2. **WASM build failures:**
-   ```bash
-   rustup update
-   rustup target add wasm32-unknown-unknown
-   ```
-
-3. **Missing dependencies:**
-   ```bash
-   zkwasm init  # Reinstall development tools
-   ```
-
 ## More Information
 
 For detailed documentation and advanced topics, visit:
 - **zkWasm Development Recipe**: https://development-recipe.zkwasm.ai/
-- **Getting Started Guide**: https://development-recipe.zkwasm.ai/getting-started/
-- **Core Concepts**: https://development-recipe.zkwasm.ai/core-documentation/
-- **Development Guide**: https://development-recipe.zkwasm.ai/development-guide/
-
-## Community
-
-- **Discord**: [Delphinus Labs Community](https://discord.gg/delphinus-labs)
-- **Telegram**: Contact Developer Relations Team for dev chat access
-- **GitHub**: [zkWasm Starter Repository](https://github.com/DelphinusLab/zkwasm-starter)
-
 ---
 
 Generated with zkwasm-cli v1.0.0 
