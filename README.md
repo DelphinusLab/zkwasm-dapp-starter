@@ -20,8 +20,8 @@ A powerful scaffolding tool for zkWasm applications, similar to `vue-cli` and `c
 
 | Method | Command | Notes |
 |--------|---------|-------|
-| **Global Install** | `npm install -g zkwasm-cli` | Recommended |
-| **Local Install** | `npm install zkwasm-cli` | Use with `npx zkwasm-dapp` |
+| **Global Install** | `npm install -g zkwasm-dapp-cli` | Recommended |
+| **Local Install** | `npm install zkwasm-dapp-cli` | Use with `npx zkwasm-dapp` |
 | **From Source** | `git clone && npm install && npm link` | Development |
 
 ### Create Your First Project

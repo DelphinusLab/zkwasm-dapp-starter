@@ -49,9 +49,9 @@ export async function createProject(projectName, options) {
     console.log(chalk.green(`\n✅ Project ${projectName} created successfully!`));
     console.log(chalk.blue('\n📖 Next steps:'));
     console.log(`   cd ${projectName}`);
-    console.log('   zkwasm init     # Initialize development environment');
-    console.log('   zkwasm build    # Build the project');
-    console.log('   zkwasm check    # Check deployment readiness');
+    console.log('   zkwasm-dapp init     # Initialize development environment');
+    console.log('   zkwasm-dapp build    # Build the project');
+    console.log('   zkwasm-dapp check    # Check deployment readiness');
     console.log(chalk.yellow('\n🔧 Template System:'));
     console.log('   • Currently using: Basic Hello World template');
     console.log('   • To add more templates: See cli/create-project.ts');

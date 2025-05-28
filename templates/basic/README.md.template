@@ -10,7 +10,7 @@
 
 ## Prerequisites
 
-- [zkWasm CLI](https://github.com/DelphinusLab/zkwasm-starter) installed globally
+- [zkWasm DApp CLI](https://github.com/DelphinusLab/zkwasm-dapp-starter) installed globally
 - Node.js (>=16.0.0)
 - Rust toolchain with wasm32-unknown-unknown target
 - wasm-pack and wasm-opt
@@ -204,4 +204,4 @@ For detailed documentation and advanced topics, visit:
 - **zkWasm Development Recipe**: https://development-recipe.zkwasm.ai/
 ---
 
-Generated with zkwasm-cli v1.0.0
+Generated with zkwasm-dapp-cli v1.0.17

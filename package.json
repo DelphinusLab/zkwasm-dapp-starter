@@ -1,12 +1,12 @@
 {
-  "name": "zkwasm-cli",
+  "name": "zkwasm-dapp-cli",
   "version": "1.0.17",
   "description": "A CLI tool for creating and managing zkWasm applications",
   "type": "module",
   "main": "cli/index.js",
   "bin": {
     "zkwasm-dapp": "./cli/index.js",
-    "zkwasm-cli": "./cli/index.js"
+    "zkwasm-dapp-cli": "./cli/index.js"
   },
   "scripts": {
     "build": "make build",
