@@ -214,6 +214,34 @@ Generates and manages publish scripts by:
 
 The CLI supports a modular template system. Currently, only the Basic Hello World template is available, but you can easily add more templates:
 
+#### Template File Organization
+
+The CLI uses a organized file structure for templates:
+
+```
+zkwasm-starter/
+├── common/                 # Common files copied to all projects
+│   ├── Dockerfile.ci       # CI/CD Docker configuration
+│   ├── Makefile           # Build automation
+│   ├── .gitignore         # Git ignore rules
+│   ├── .env.example       # Environment variables template
+│   ├── rust-toolchain     # Rust toolchain specification
+│   └── .github/           # GitHub Actions workflows
+│       └── workflows/
+├── templates/             # Template-specific files
+│   └── basic/             # Basic Hello World template
+│       ├── src/           # Rust source code
+│       ├── ts/            # TypeScript service
+│       ├── Cargo.toml.template
+│       └── README.md.template
+└── cli/                   # CLI implementation
+```
+
+**File Copying Process:**
+1. **Template-specific files** from `templates/<template>/` → project root
+2. **Common files** from `common/` → project root  
+3. **Generated files** (Cargo.toml, README.md) → project root
+
 #### Adding New Templates
 
 | Step | Action | Location |

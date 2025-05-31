@@ -38,7 +38,23 @@ const TEMPLATES = {
 };
 ```
 
-### 2. Template Files
+### 2. File Organization
+
+The template system uses two types of files:
+
+#### Common Files (shared across all templates)
+```
+common/
+├── Dockerfile.ci           # CI/CD Docker configuration
+├── Makefile               # Build automation
+├── .gitignore             # Git ignore rules
+├── .env.example           # Environment variables template
+├── rust-toolchain         # Rust toolchain specification
+└── .github/               # GitHub Actions workflows
+    └── workflows/
+```
+
+#### Template-Specific Files
 ```
 templates/basic/
 ├── src/                    # Rust source code
@@ -53,7 +69,14 @@ templates/basic/
 └── README.md.template      # Templated documentation
 ```
 
-### 3. Template Variables
+### 3. File Copying Process
+
+When creating a new project, the CLI:
+1. Copies template-specific files from `templates/<template>/`
+2. Copies common files from `common/`
+3. Generates dynamic files using Mustache templates
+
+### 4. Template Variables
 Templates use Mustache templating for dynamic content:
 
 ```mustache
@@ -83,6 +106,8 @@ templates/your-template-name/
 ├── Cargo.toml.template     # Templated Cargo.toml
 └── README.md.template      # Templated README
 ```
+
+**Note**: Common files (Makefile, Dockerfile.ci, .gitignore, etc.) are automatically included from the `common/` directory and don't need to be added to individual templates.
 
 ### Step 3: Update Template Registry
 Add your template to the `TEMPLATES` object in `cli/create-project.ts`:
