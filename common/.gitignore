@@ -1,0 +1,19 @@
+pkg
+target
+**/node_modules
+.env
+
+# TypeScript compilation artifacts (except dist/)
+**/*.js.map
+**/*.d.ts
+**/*.d.ts.map
+
+# Ignore JS files except in cli/ directory (compiled from TS)
+**/*.js
+!cli/*.js
+
+# CLI generated files
+ts/publish.sh
+zkwasm.config.json
+scripts/
+.npmrc

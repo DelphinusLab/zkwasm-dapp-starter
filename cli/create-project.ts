@@ -180,31 +180,33 @@ async function copyTemplateFiles(template: string, targetDir: string, config: Pr
   
   // Copy common files from package directory (one level up from cli/)
   const packageDir = path.resolve(__dirname, '..');
+  const commonDir = path.join(packageDir, 'common');
   const commonFiles = [
     '.gitignore',
     '.env.example',
     'rust-toolchain',
-    'Makefile'
+    'Makefile',
+    'Dockerfile.ci'
   ];
   
   for (const file of commonFiles) {
-    const sourcePath = path.join(packageDir, file);
+    const sourcePath = path.join(commonDir, file);
     const targetPath = path.join(targetDir, file);
     
     if (await fs.pathExists(sourcePath)) {
       await fs.copy(sourcePath, targetPath);
-      console.log(chalk.gray(`  ✓ Copied ${file} from package directory`));
+      console.log(chalk.gray(`  ✓ Copied ${file} from common directory`));
     }
   }
   
   // Copy .github directory if GitHub Actions is enabled
   if (config.useGithubActions) {
-    const githubSourcePath = path.join(packageDir, '.github');
+    const githubSourcePath = path.join(commonDir, '.github');
     const githubTargetPath = path.join(targetDir, '.github');
     
     if (await fs.pathExists(githubSourcePath)) {
       await fs.copy(githubSourcePath, githubTargetPath);
-      console.log(chalk.gray(`  ✓ Copied .github/ from package directory`));
+      console.log(chalk.gray(`  ✓ Copied .github/ from common directory`));
     }
   }
   

@@ -18,12 +18,8 @@
   "files": [
     "cli/*.js",
     "templates/",
-    "Makefile",
-    "rust-toolchain",
-    "README.md",
-    ".gitignore",
-    ".env.example",
-    ".github/"
+    "common/",
+    "README.md"
   ],
   "repository": {
     "type": "git",
@@ -62,3 +58,4 @@
     "node": ">=16.0.0"
   }
 }
+ 

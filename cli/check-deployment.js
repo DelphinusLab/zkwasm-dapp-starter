@@ -18,9 +18,11 @@ export async function checkDeployment(options = {}) {
     await checkWasmIntegrity(results, verbose);
     // 3. Check zkWasm hub image availability
     await checkZkWasmImage(results, verbose);
+    // 4. Check CI/CD configuration files
+    await checkCiFiles(results, verbose);
     // Summary
     console.log('\n' + chalk.blue('📋 Deployment Check Summary:'));
-    const totalPassed = 3 - results.errors.length; // Now 3 main checks
+    const totalPassed = 4 - results.errors.length; // Now 4 main checks
     console.log(`${chalk.green('✅ Checks passed:')} ${totalPassed}`);
     if (results.warnings.length > 0) {
         console.log(`${chalk.yellow('⚠️  Warnings:')} ${results.warnings.length}`);
@@ -165,6 +167,23 @@ async function checkZkWasmImage(results, verbose) {
         results.errors.push(`Failed to check zkWasm hub: ${error.message}`);
         if (verbose) {
             console.log(chalk.red(`  ❌ Error querying zkWasm hub: ${error.message}`));
+        }
+    }
+}
+async function checkCiFiles(results, verbose) {
+    if (verbose)
+        console.log(chalk.blue('Checking CI/CD configuration files...'));
+    const ciFiles = [
+        { file: 'Dockerfile.ci', description: 'CI/CD Docker configuration' },
+        { file: 'Makefile', description: 'Build automation configuration' }
+    ];
+    for (const { file, description } of ciFiles) {
+        if (!await fs.pathExists(file)) {
+            results.errors.push(`Required CI/CD file missing: ${file} (${description})`);
+        }
+        else if (verbose) {
+            const stats = await fs.stat(file);
+            console.log(chalk.green(`  ✅ ${file} (${description}, ${(stats.size / 1024).toFixed(2)} KB)`));
         }
     }
 }

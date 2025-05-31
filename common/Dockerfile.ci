@@ -1,0 +1,35 @@
+# Build stage
+FROM node:18-bullseye as builder
+
+WORKDIR /app
+
+# Copy project files
+COPY . .
+
+# Install npm dependencies first
+RUN cd ts && npm install && npx tsc
+
+# Copy pre-built WASM files
+COPY build-artifacts/application/* ts/node_modules/zkwasm-ts-server/src/application/
+
+# Production stage
+FROM node:18-slim
+
+# Set non-sensitive environment variables
+ENV NODE_ENV="production"
+
+WORKDIR /app
+
+# Copy only necessary files from builder
+COPY --from=builder /app/ts ./ts
+COPY --from=builder /app/src/admin.pubkey ./src/admin.pubkey
+
+# Create user first
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+
+# Switch to non-root user
+USER appuser
+
+EXPOSE 3000
+# Application will get environment variables from Kubernetes Secret
+CMD ["node", "./ts/src/service.js"]
