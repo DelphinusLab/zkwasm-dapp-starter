@@ -198,9 +198,7 @@ Checks deployment readiness by validating:
 Generates and manages publish scripts by:
 - Creating customizable publish.sh scripts
 - Supporting environment variables (ZKWASM_ADDRESS, ZKWASM_PRIVATE_KEY)
-- Detecting "already exists" errors gracefully
 - Providing migration support (optional data import from existing images)
-- Configuring network auto-submission to specified network IDs
 
 ## 📁 Project Templates
 
@@ -236,11 +234,6 @@ zkwasm-starter/
 │       └── README.md.template
 └── cli/                   # CLI implementation
 ```
-
-**File Copying Process:**
-1. **Template-specific files** from `templates/<template>/` → project root
-2. **Common files** from `common/` → project root  
-3. **Generated files** (Cargo.toml, README.md) → project root
 
 #### Adding New Templates
 
@@ -282,7 +275,7 @@ const TEMPLATES = {
 };
 ```
 
-## 🏗️ Project Structure
+#### Template Project Structure
 
 ```
 my-zkwasm-app/
@@ -294,15 +287,23 @@ my-zkwasm-app/
 │   ├── src/               # TS source files
 │   ├── package.json       # TS dependencies
 │   └── tsconfig.json      # TS configuration
-├── cli/                    # CLI tool scripts
-├── scripts/               # Development scripts
 ├── build-artifacts/       # Build outputs
-├── Cargo.toml             # Rust configuration
-├── Makefile               # Build configuration
-├── zkwasm.config.json     # zkWasm configuration
-├── deployment-history.json # Deployment tracking
-└── README.md              # Project documentation
+├── .github/               # GitHub Actions workflows (if enabled)
+│   └── workflows/
+├── Cargo.toml             # Rust configuration (generated)
+├── Makefile               # Build automation (from common/)
+├── Dockerfile.ci          # CI/CD Docker configuration (from common/)
+├── .gitignore             # Git ignore rules (from common/)
+├── .env.example           # Environment variables template (from common/)
+├── rust-toolchain         # Rust toolchain specification (from common/)
+├── zkwasm.config.json     # zkWasm configuration (generated)
+└── README.md              # Project documentation (generated)
 ```
+
+**File Sources:**
+- 📁 **Template-specific**: `src/`, `ts/` directories from `templates/basic/`
+- 📁 **Common files**: `Makefile`, `Dockerfile.ci`, `.gitignore`, etc. from `common/`
+- 📄 **Generated files**: `Cargo.toml`, `README.md`, `zkwasm.config.json` using Mustache templates
 
 ## ⚙️ Configuration (zkwasm-dapp init)
 
