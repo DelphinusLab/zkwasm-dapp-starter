@@ -1,6 +1,9 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import inquirer from 'inquirer';
+import * as dotenv from "dotenv";
+import * as path from "path";
+import { get_zkwasm_hub_endpoint } from './init-config.js';
 
 interface PublishConfig {
   resturl: string;
@@ -96,7 +99,7 @@ async function collectPublishConfig(): Promise<PublishConfig> {
       type: 'input',
       name: 'resturl',
       message: 'zkWasm hub API endpoint:',
-      default: 'https://rpc.zkwasmhub.com:8090'
+      default: get_zkwasm_hub_endpoint(),
     },
     {
       type: 'input',

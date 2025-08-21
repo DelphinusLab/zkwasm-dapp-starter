@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import crypto from 'crypto';
 import fs from 'fs-extra';
 import path from 'path';
-const endpoint = "https://rpc.zkwasmhub.com:8090";
+import { get_zkwasm_hub_endpoint } from './init-config.js';
 export async function checkDeployment(options = {}) {
     const verbose = options.verbose || false;
     const results = {
@@ -104,7 +104,7 @@ async function checkWasmIntegrity(results, verbose) {
 }
 async function queryZkWasmImage(md5) {
     try {
-        const url = `${endpoint}/image`;
+        const url = `${get_zkwasm_hub_endpoint()}/image`;
         const params = new URLSearchParams({ md5 });
         const response = await fetch(`${url}?${params}`, {
             method: 'GET',

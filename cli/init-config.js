@@ -3,6 +3,16 @@ import { spawn } from 'child_process';
 import fs from 'fs-extra';
 import inquirer from 'inquirer';
 import path from 'path';
+import * as dotenv from "dotenv";
+export const get_zkwasm_hub_endpoint = () => {
+    dotenv.config({ path: path.resolve(process.cwd(), ".env"), quiet: true });
+    if (process.env.ZKWASM_HUB_URL) {
+        return process.env.ZKWASM_HUB_URL;
+    }
+    else {
+        return "https://rpc.zkwasmhub.com:8090";
+    }
+};
 export async function initConfig() {
     console.log(chalk.blue('🔧 Initializing zkWasm development environment...\n'));
     // Check current environment
