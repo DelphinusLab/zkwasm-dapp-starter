@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import inquirer from 'inquirer';
+import { get_zkwasm_hub_endpoint } from './init-config.js';
 export async function generatePublishScript() {
     console.log(chalk.blue('📄 Generating publish script for zkWasm hub...\n'));
     // Collect configuration
@@ -68,7 +69,7 @@ async function collectPublishConfig() {
             type: 'input',
             name: 'resturl',
             message: 'zkWasm hub API endpoint:',
-            default: 'https://rpc.zkwasmhub.com:8090'
+            default: get_zkwasm_hub_endpoint(),
         },
         {
             type: 'input',
